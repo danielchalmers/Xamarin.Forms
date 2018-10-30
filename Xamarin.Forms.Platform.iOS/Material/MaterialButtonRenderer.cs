@@ -1,21 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
+using System;
+using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
-using System.Text;
-
 using Foundation;
 using UIKit;
-using Xamarin.Forms;
+using Xamarin.Forms.PlatformConfiguration.iOSSpecific;
+using SizeF = CoreGraphics.CGSize;
 using MButton = MaterialComponents.Button;
+using Xamarin.Forms;
 
-[assembly: ExportRenderer(typeof(Button), typeof(Xamarin.Forms.Platform.iOS.Material.MaterialButtonRenderer), new[] { typeof(Visual.MaterialVisual) })]
+[assembly: ExportRenderer(typeof(Xamarin.Forms.Button), typeof(Xamarin.Forms.Platform.iOS.Material.MaterialButtonRenderer), new[] { typeof(Visual.MaterialVisual) })]
 namespace Xamarin.Forms.Platform.iOS.Material
 {
-	public class MaterialButtonRenderer : ButtonRenderer
+	public class MaterialButtonRenderer : ViewRenderer<Button, MButton>
 	{
-		protected override UIButton CreateNativeControl()
+		protected override void OnElementChanged(ElementChangedEventArgs<Button> e)
 		{
-			return new MButton();
+			base.OnElementChanged(e);
+			SetNativeControl(new MButton());
+			Control.BackgroundColor = Element.BackgroundColor.ToUIColor();
+			Control.SetTitle(Element.Text, UIControlState.Normal);
 		}
 	}
 }

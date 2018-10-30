@@ -125,6 +125,7 @@
     <Compile Include="Extensions\LabelExtensions.cs" />
     <Compile Include="Extensions\VisualElementExtensions.cs" />
     <Compile Include="Flags.cs" />
+    <Compile Include="Material\MaterialButtonRenderer.cs" />
     <Compile Include="Material\MaterialEntryRenderer.cs" />
     <Compile Include="NativeViewWrapper.cs" />
     <Compile Include="NativeViewWrapperRenderer.cs" />
@@ -147,7 +148,6 @@
     <Compile Include="NativeValueConverterService.cs" />
     <Compile Include="NativeBindingService.cs" />
     <Compile Include="Extensions\AccessibilityExtensions.cs" />
-    <Compile Include="Material\MaterialButtonRenderer.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\StringResources.ar.resx" />
