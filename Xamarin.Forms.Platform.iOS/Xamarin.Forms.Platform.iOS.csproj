@@ -127,6 +127,7 @@
     <Compile Include="Flags.cs" />
     <Compile Include="Material\MaterialButtonRenderer.cs" />
     <Compile Include="Material\MaterialEntryRenderer.cs" />
+    <Compile Include="Material\MaterialProgressBarRenderer.cs" />
     <Compile Include="NativeViewWrapper.cs" />
     <Compile Include="NativeViewWrapperRenderer.cs" />
     <Compile Include="PlatformEffect.cs" />
