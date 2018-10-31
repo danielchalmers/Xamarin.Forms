@@ -9,15 +9,16 @@ using Xamarin.Forms.PlatformConfiguration.iOSSpecific;
 using Specifics = Xamarin.Forms.PlatformConfiguration.iOSSpecific.Entry;
 using MTextField = MaterialComponents.TextField;
 using MTextInputControllerOutlined = MaterialComponents.TextInputControllerOutlined;
-using MTextInputControllerUnderline = MaterialComponents.TextInputControllerUnderline;
+using MTextInputControllerFilled = MaterialComponents.TextInputControllerFilled;
 using MTextInputControllerBase = MaterialComponents.TextInputControllerBase;
+using MTextInputControllerUnderline = MaterialComponents.TextInputControllerUnderline;
 
 using Xamarin.Forms;
 
 // for now using separate renderer as there's some areas of conflict (like place holder)
 // plus we want the linker to be able to link this out if not used
 // possibly use base class for common behavior
-[assembly: ExportRenderer(typeof(Xamarin.Forms.Entry), typeof(Xamarin.Forms.Platform.iOS.Material.MaterialEntryRenderer), new[] { typeof(Visual.MaterialVisual) })]
+//[assembly: ExportRenderer(typeof(Xamarin.Forms.Entry), typeof(Xamarin.Forms.Platform.iOS.Material.MaterialEntryRenderer), new[] { typeof(Visual.MaterialVisual) })]
 namespace Xamarin.Forms.Platform.iOS.Material
 {
 	public class MaterialEntryRenderer : ViewRenderer<Entry, MTextField>
@@ -92,9 +93,9 @@ namespace Xamarin.Forms.Platform.iOS.Material
 		protected override MTextField CreateNativeControl()
 		{
 			var field = new MTextField();
+			field.BorderStyle = UITextBorderStyle.None;
 			field.ClearButtonMode = UITextFieldViewMode.UnlessEditing;
 			_activeTextinputController = new MTextInputControllerUnderline(field);
-			//controllerUnderline.PlaceholderText = (string)Element.GetValue(AutomationProperties.HelpTextProperty);
 			return field;
 		}
 
@@ -115,8 +116,8 @@ namespace Xamarin.Forms.Platform.iOS.Material
 
 				_useLegacyColorManagement = e.NewElement.UseLegacyColorManagement();
 
-				textField.BorderStyle = UITextBorderStyle.RoundedRect;
-				textField.ClipsToBounds = true;
+			//textField.BorderStyle = UITextBorderStyle.RoundedRect;
+				//textField.ClipsToBounds = true;
 
 				textField.EditingChanged += OnEditingChanged;
 				textField.ShouldReturn = OnShouldReturn;
@@ -316,8 +317,6 @@ namespace Xamarin.Forms.Platform.iOS.Material
 			{
 				var color = targetColor.IsDefault || !Element.IsEnabled ? _defaultPlaceholderColor : targetColor;
 				iosColor = color.ToUIColor();
-				_activeTextinputController.InlinePlaceholderColor = color.ToUIColor();
-				_activeTextinputController.FloatingPlaceholderActiveColor = color.ToUIColor();
 			}
 			else
 			{
