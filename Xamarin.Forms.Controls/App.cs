@@ -101,12 +101,7 @@ namespace Xamarin.Forms.Controls
 
 			await TestBugzilla44596();
 		}
-
-
-		public class MaterialTextView : View
-		{
-
-		}
+		
 
 		public Page CreateDefaultMainPage()
 		{
@@ -114,9 +109,9 @@ namespace Xamarin.Forms.Controls
 			var entryField = new Entry()
 			{
 				Visual = Visual.Material,
-				Text = "Material",
+				//Text = "Material",
 				Placeholder = "I am the title Text",
-				PlaceholderColor = Color.Green
+				PlaceholderColor = Color.Pink
 			};
 
 			var entryField2 = new Entry()
@@ -133,14 +128,15 @@ namespace Xamarin.Forms.Controls
 				{
 					Children =
 					{
-						//entryField,
-						//entryField2,
+						entryField,
+						entryField2,
 						new Button(){
 							Text = "Material",
 							Visual = Visual.Material,
 							BackgroundColor = Color.Green,
 							WidthRequest = 300,
-							HorizontalOptions = LayoutOptions.Center
+							HorizontalOptions = LayoutOptions.Center,
+							//CornerRadius = 5
 						},
 						//new Button(){ Text = "Default", Visual = Visual.Default, BackgroundColor = Color.Green }
 					}

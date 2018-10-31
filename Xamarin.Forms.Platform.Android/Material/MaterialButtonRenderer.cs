@@ -21,7 +21,7 @@ using Android.Support.V4.View;
 [assembly: ExportRenderer(typeof(Button), typeof(MaterialButtonRenderer), new[] { typeof(Visual.MaterialVisual) })]
 namespace Xamarin.Forms.Platform.Android.Material
 {
-	internal sealed class MaterialButtonRenderer : AppCompatButton, IVisualElementRenderer, AView.IOnAttachStateChangeListener,
+	internal sealed class MaterialButtonRenderer : MButton, IVisualElementRenderer, AView.IOnAttachStateChangeListener,
 		AView.IOnFocusChangeListener, IEffectControlProvider, AView.IOnClickListener, AView.IOnTouchListener, IViewRenderer, ITabStop
 	{
 		float _defaultFontSize;
@@ -237,6 +237,7 @@ namespace Xamarin.Forms.Platform.Android.Material
 				UpdateInputTransparent();
 				UpdateBackgroundColor();
 				UpdatePadding();
+				UpdateBorder();
 
 				ElevationHelper.SetElevation(this, e.NewElement);
 			}
@@ -278,8 +279,20 @@ namespace Xamarin.Forms.Platform.Android.Material
 			{
 				UpdatePadding();
 			}
+			else if (e.PropertyName == Button.BorderWidthProperty.PropertyName || e.PropertyName == Button.CornerRadiusProperty.PropertyName || e.PropertyName == Button.BorderColorProperty.PropertyName)
+				UpdateBorder();
 
 			ElementPropertyChanged?.Invoke(this, e);
+		}
+
+		private void UpdateBorder()
+		{
+			int cornerRadius = ButtonDrawable.DefaultCornerRadius;
+
+			if (Button.IsSet(Button.CornerRadiusProperty) && Button.CornerRadius != (int)Button.CornerRadiusProperty.DefaultValue)
+				cornerRadius = Button.CornerRadius;
+
+			this.CornerRadius = (int)Context.ToPixels(cornerRadius);
 		}
 
 		protected override void OnLayout(bool changed, int l, int t, int r, int b)
@@ -312,15 +325,27 @@ namespace Xamarin.Forms.Platform.Android.Material
 
 		void UpdateBackgroundColor()
 		{
+			int[][] States = 
+			{
+				new[] { global::Android.Resource.Attribute.StateEnabled },
+				new[] { -global::Android.Resource.Attribute.StateEnabled },
+				new[] { global::Android.Resource.Attribute.StateFocused },
+				new[] { global::Android.Resource.Attribute.StateActive }
+			};
+
 			ColorStateList colorStateList = new ColorStateList(
-						ColorExtensions.States,
+						States,
 						new int[]{
+							Element.BackgroundColor.ToAndroid(),
+							Element.BackgroundColor.ToAndroid(),
 							Element.BackgroundColor.ToAndroid(),
 							Element.BackgroundColor.ToAndroid()
 						}
 				);
 
+			 
 			global::Android.Support.V4.View.ViewCompat.SetBackgroundTintList(this, colorStateList);
+			SetBackgroundColor(Color.Pink.ToAndroid());
 		}
 
 		internal void OnNativeFocusChanged(bool hasFocus)
@@ -480,7 +505,14 @@ namespace Xamarin.Forms.Platform.Android.Material
 				return;
 			}
 
+			
 			_textColorSwitcher.Value.UpdateTextColor(this, Button.TextColor);
+
+			
+			/*if (Button.TextColor == Color.Default)
+				_textColorSwitcher.Value.UpdateTextColor(this, Button.TextColor);
+			else
+				_textColorSwitcher.Value.UpdateTextColor(this, Color.White);*/
 		}
 
 		void UpdatePadding()
