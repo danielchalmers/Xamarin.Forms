@@ -38,7 +38,7 @@ namespace Xamarin.Forms.Platform.iOS.Material
 			{
 				if(System.nfloat.IsInfinity(size.Height))
 				{
-					height = 2;
+					height = 5;
 				}
 				else
 				{
