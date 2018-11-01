@@ -3,19 +3,13 @@ using UIKit;
 using SizeF = CoreGraphics.CGSize;
 using MProgressView = MaterialComponents.ProgressView;
 using Xamarin.Forms;
+using CoreGraphics;
 
 [assembly: ExportRenderer(typeof(Xamarin.Forms.ProgressBar), typeof(Xamarin.Forms.Platform.iOS.Material.MaterialProgressBarRenderer), new[] { typeof(Visual.MaterialVisual) })]
 namespace Xamarin.Forms.Platform.iOS.Material
 {
 	public class MaterialProgressBarRenderer : ViewRenderer<ProgressBar, MProgressView>
 	{
-		public override SizeF SizeThatFits(SizeF size)
-		{
-			// progress bar will size itself to be as wide as the request, even if its inifinite
-			// we want the minimum need size
-			var result = base.SizeThatFits(size);
-			return new SizeF(10, result.Height);
-		}
 
 		protected override void OnElementChanged(ElementChangedEventArgs<ProgressBar> e)
 		{
@@ -29,6 +23,30 @@ namespace Xamarin.Forms.Platform.iOS.Material
 			}
 
 			base.OnElementChanged(e);
+			Control.SetHidden(false, true, (completion) => { });
+			Element.WidthRequest = 10;
+
+		}
+
+
+		public override SizeF SizeThatFits(SizeF size)
+		{
+			var result = base.SizeThatFits(size);
+			var height = result.Height;
+
+			if(height == 0)
+			{
+				if(System.nfloat.IsInfinity(size.Height))
+				{
+					height = 2;
+				}
+				else
+				{
+					height = size.Height;
+				}
+
+			}
+			return new SizeF(10, height);
 		}
 
 		protected override void OnElementPropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -53,7 +71,8 @@ namespace Xamarin.Forms.Platform.iOS.Material
 
 		void UpdateProgressColor()
 		{
-			Control.ProgressTintColor = Element.ProgressColor == Color.Default ? null : Element.ProgressColor.ToUIColor();
+			//Doesn't work on material
+			//Control.ProgressTintColor = Element.ProgressColor == Color.Default ? null : Element.ProgressColor.ToUIColor();
 		}
 
 		void UpdateProgress()

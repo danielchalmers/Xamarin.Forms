@@ -122,6 +122,21 @@ namespace Xamarin.Forms.Controls
 				PlaceholderColor = Color.Green
 			};
 
+			ProgressBar progressBar = new ProgressBar()
+			{
+				Visual = Visual.Material
+			};
+
+			Device.StartTimer(TimeSpan.FromSeconds(1), () =>
+			{
+				var progress = progressBar.Progress + 0.1;
+				if (progress > 1)
+					progress = 0;
+
+				progressBar.Progress = progress;
+				return true;
+			});
+
 			var page = new ContentPage()
 			{
 				Content = new StackLayout()
@@ -135,9 +150,9 @@ namespace Xamarin.Forms.Controls
 							Visual = Visual.Material,
 							BackgroundColor = Color.Green,
 							WidthRequest = 300,
-							HorizontalOptions = LayoutOptions.Center,
-							//CornerRadius = 5
+							HorizontalOptions = LayoutOptions.Center
 						},
+						progressBar
 						//new Button(){ Text = "Default", Visual = Visual.Default, BackgroundColor = Color.Green }
 					}
 				}
