@@ -1,5 +1,6 @@
 using System;
 using System.ComponentModel;
+using System.Threading.Tasks;
 using Android.Content;
 using Android.Graphics.Drawables;
 using Android.Support.V4.View;
@@ -24,7 +25,6 @@ namespace Xamarin.Forms.Platform.Android.Material
 
 		bool _disposed;
 		Frame _element;
-		GradientDrawable _backgroundDrawable;
 
 		VisualElementPackager _visualElementPackager;
 		VisualElementTracker _visualElementTracker;
@@ -135,12 +135,6 @@ namespace Xamarin.Forms.Platform.Android.Material
 					_visualElementPackager = null;
 				}
 
-				if (_backgroundDrawable != null)
-				{
-					_backgroundDrawable.Dispose();
-					_backgroundDrawable = null;
-				}
-
 				int count = ChildCount;
 				for (var i = 0; i < count; i++)
 				{
@@ -173,8 +167,6 @@ namespace Xamarin.Forms.Platform.Android.Material
 			if (e.NewElement != null)
 			{
 				this.EnsureId();
-				_backgroundDrawable = new GradientDrawable();
-				_backgroundDrawable.SetShape(ShapeType.Rectangle);
 				//this.SetBackground(_backgroundDrawable);
 
 				if (_visualElementTracker == null)
@@ -245,6 +237,7 @@ namespace Xamarin.Forms.Platform.Android.Material
 			{
 				new int[0]
 			};
+
 			CardBackgroundColor = new global::Android.Content.Res.ColorStateList
 				(
 					States,
@@ -259,11 +252,17 @@ namespace Xamarin.Forms.Platform.Android.Material
 				return;
 
 			Color borderColor = Element.BorderColor;
-
 			if (borderColor.IsDefault)
-				_backgroundDrawable.SetStroke(0, AColor.Transparent);
+			{
+				StrokeColor = AColor.Transparent;
+				StrokeWidth = 0;
+			}
 			else
-				_backgroundDrawable.SetStroke(3, borderColor.ToAndroid());
+			{
+				StrokeColor = borderColor.ToAndroid();
+				StrokeWidth = 25;
+			}
+
 		}
 
 		void UpdateShadow()
@@ -298,8 +297,6 @@ namespace Xamarin.Forms.Platform.Android.Material
 				cornerRadius = _defaultCornerRadius;
 			else
 				cornerRadius = Context.ToPixels(cornerRadius);
-
-			_backgroundDrawable.SetCornerRadius(cornerRadius);
 
 			this.Radius = cornerRadius;
 		}

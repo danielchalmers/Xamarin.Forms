@@ -17,6 +17,7 @@ using Android.Content.Res;
 using Android.Support.V4.Widget;
 using AMotionEventActions = Android.Views.MotionEventActions;
 using Android.Support.V4.View;
+using AColor = Android.Graphics.Color;
 
 [assembly: ExportRenderer(typeof(Button), typeof(MaterialButtonRenderer), new[] { typeof(Visual.MaterialVisual) })]
 namespace Xamarin.Forms.Platform.Android.Material
@@ -293,6 +294,33 @@ namespace Xamarin.Forms.Platform.Android.Material
 				cornerRadius = Button.CornerRadius;
 
 			this.CornerRadius = (int)Context.ToPixels(cornerRadius);
+
+			int[][] States =
+			{
+				new int[0]
+			};
+
+			Color borderColor = Button.BorderColor;
+			if (borderColor.IsDefault)
+			{
+				StrokeColor = new global::Android.Content.Res.ColorStateList
+				(
+					States,
+					new int[] { AColor.Transparent }
+				);
+
+				StrokeWidth = 0;
+			}
+			else
+			{
+				StrokeColor = new global::Android.Content.Res.ColorStateList
+				(
+					States,
+					new int[] { borderColor.ToAndroid() }
+				);
+
+				StrokeWidth = (int)Button.BorderWidth;
+			}
 		}
 
 		protected override void OnLayout(bool changed, int l, int t, int r, int b)

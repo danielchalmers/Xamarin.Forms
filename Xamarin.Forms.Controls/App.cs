@@ -151,7 +151,9 @@ namespace Xamarin.Forms.Controls
 							Margin = 10,
 							HasShadow = true,
 							//border not working
-							//BorderColor = Color.Blue,
+							BorderColor = Color.Blue,
+							BackgroundColor = Color.Yellow,
+							CornerRadius = 10,
 							Content = new Label()
 							{
 								Text = "Welcome To Visuals",
@@ -165,6 +167,7 @@ namespace Xamarin.Forms.Controls
 							Visual = Visual.Material,
 							Margin = 10,
 							HasShadow = true,
+							//border not working
 							//BorderColor = Color.Blue,
 							Content = new StackLayout()
 							{
@@ -192,7 +195,9 @@ namespace Xamarin.Forms.Controls
 										TextColor = Color.Black,
 										HorizontalOptions = LayoutOptions.FillAndExpand,
 										Margin = new Thickness(5,0,5,0),
-										CornerRadius = 3
+										CornerRadius = 3,
+										BorderColor = Color.Blue,
+										BorderWidth = 4
 									}
 								}
 							}
