@@ -106,112 +106,112 @@ namespace Xamarin.Forms.Controls
 		public Page CreateDefaultMainPage()
 		{
 
-			var entryField = new Entry()
-			{
-				Visual = Visual.Material,
-				//Text = "Material",
-				Placeholder = "I am the title Text",
-				PlaceholderColor = Color.Pink
-			};
+			//var entryField = new Entry()
+			//{
+			//	Visual = Visual.Material,
+			//	//Text = "Material",
+			//	Placeholder = "I am the title Text",
+			//	PlaceholderColor = Color.Pink
+			//};
 
-			var entryField2 = new Entry()
-			{
-				Visual = Visual.Material,
-				Text = "",
-				Placeholder = "I am the title Text",
-				PlaceholderColor = Color.Green
-			};
+			//var entryField2 = new Entry()
+			//{
+			//	Visual = Visual.Material,
+			//	Text = "",
+			//	Placeholder = "I am the title Text",
+			//	PlaceholderColor = Color.Green
+			//};
 
-			ProgressBar progressBar = new ProgressBar()
-			{
-				Visual = Visual.Material,
-				ProgressColor = Color.Blue,
-				HeightRequest = 5
-			};
+			//ProgressBar progressBar = new ProgressBar()
+			//{
+			//	Visual = Visual.Material,
+			//	ProgressColor = Color.Blue,
+			//	HeightRequest = 5
+			//};
 
-			Device.StartTimer(TimeSpan.FromSeconds(1), () =>
-			{
-				var progress = progressBar.Progress + 0.1;
-				if (progress > 1)
-					progress = 0;
+			//Device.StartTimer(TimeSpan.FromSeconds(1), () =>
+			//{
+			//	var progress = progressBar.Progress + 0.1;
+			//	if (progress > 1)
+			//		progress = 0;
 
-				progressBar.Progress = progress;
-				return true;
-			});
+			//	progressBar.Progress = progress;
+			//	return true;
+			//});
 
-			var page = new ContentPage()
-			{
-				Content = new StackLayout()
-				{
-					Children =
-					{
-						new Frame()
-						{
-							Visual = Visual.Material,
-							Margin = 10,
-							HasShadow = true,
-							//border not working
-							BorderColor = Color.Blue,
-							BackgroundColor = Color.Yellow,
-							CornerRadius = 10,
-							Content = new Label()
-							{
-								Text = "Welcome To Visuals",
-								HorizontalOptions = LayoutOptions.Center,
-								FontSize = Device.GetNamedSize (NamedSize.Large, typeof(Label))
-							}
+			//var page = new ContentPage()
+			//{
+			//	Content = new StackLayout()
+			//	{
+			//		Children =
+			//		{
+			//			new Frame()
+			//			{
+			//				Visual = Visual.Material,
+			//				Margin = 10,
+			//				HasShadow = true,
+			//				//border not working
+			//				BorderColor = Color.Blue,
+			//				BackgroundColor = Color.Yellow,
+			//				CornerRadius = 10,
+			//				Content = new Label()
+			//				{
+			//					Text = "Welcome To Visuals",
+			//					HorizontalOptions = LayoutOptions.Center,
+			//					FontSize = Device.GetNamedSize (NamedSize.Large, typeof(Label))
+			//				}
 
-						},
-						new Frame()
-						{
-							Visual = Visual.Material,
-							Margin = 10,
-							HasShadow = true,
-							//border not working
-							//BorderColor = Color.Blue,
-							Content = new StackLayout()
-							{
-								Children =
-								{
-									new Entry()
-									{
-										Visual = Visual.Material,
-										PlaceholderColor = Color.Green,
-										Placeholder = "Login"
-									},
-									new Entry()
-									{
-										Visual = Visual.Material,
-										PlaceholderColor = Color.Green,
-										Placeholder = "Password",
-										IsPassword = true
-									},
-									progressBar,
-									new Button()
-									{
-										Text = "Login",
-										Visual = Visual.Material,
-										BackgroundColor = Color.Pink,
-										TextColor = Color.Black,
-										HorizontalOptions = LayoutOptions.FillAndExpand,
-										Margin = new Thickness(5,0,5,0),
-										CornerRadius = 3,
-										BorderColor = Color.Blue,
-										BorderWidth = 4
-									}
-								}
-							}
-						}
-					}
-				}
-			};
+			//			},
+			//			new Frame()
+			//			{
+			//				Visual = Visual.Material,
+			//				Margin = 10,
+			//				HasShadow = true,
+			//				//border not working
+			//				//BorderColor = Color.Blue,
+			//				Content = new StackLayout()
+			//				{
+			//					Children =
+			//					{
+			//						new Entry()
+			//						{
+			//							Visual = Visual.Material,
+			//							PlaceholderColor = Color.Green,
+			//							Placeholder = "Login"
+			//						},
+			//						new Entry()
+			//						{
+			//							Visual = Visual.Material,
+			//							PlaceholderColor = Color.Green,
+			//							Placeholder = "Password",
+			//							IsPassword = true
+			//						},
+			//						progressBar,
+			//						new Button()
+			//						{
+			//							Text = "Login",
+			//							Visual = Visual.Material,
+			//							BackgroundColor = Color.Pink,
+			//							TextColor = Color.Black,
+			//							HorizontalOptions = LayoutOptions.FillAndExpand,
+			//							Margin = new Thickness(5,0,5,0),
+			//							CornerRadius = 3,
+			//							BorderColor = Color.Blue,
+			//							BorderWidth = 4
+			//						}
+			//					}
+			//				}
+			//			}
+			//		}
+			//	}
+			//};
 
-			page.On<iOS>().SetUseSafeArea(true);
-			return new NavigationPage(page);
+			//page.On<iOS>().SetUseSafeArea(true);
+			//return new NavigationPage(page);
 
-			/*var layout = new StackLayout { BackgroundColor = Color.Red };
+			var layout = new StackLayout { BackgroundColor = Color.Red };
 			layout.Children.Add(new Label { Text = "This is master Page" });
-			var master = new ContentPage { Title = "Master", Content = layout, BackgroundColor = Color.SkyBlue, Icon ="menuIcon" };
+			var master = new ContentPage { Title = "Master", Content = layout, BackgroundColor = Color.SkyBlue, Icon = "menuIcon" };
 			master.On<iOS>().SetUseSafeArea(true);
 			var mdp = new MasterDetailPage
 			{
@@ -224,7 +224,7 @@ namespace Xamarin.Forms.Controls
 			mdp.SetAutomationPropertiesHelpText("Main page help text");
 			mdp.Master.Icon.SetAutomationPropertiesHelpText("This as MDP icon");
 			mdp.Master.Icon.SetAutomationPropertiesName("MDPICON");
-			return mdp;*/
+			return mdp;
 		}
 
 		protected override void OnAppLinkRequestReceived(Uri uri)
