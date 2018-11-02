@@ -1,5 +1,8 @@
+using System;
 using System.ComponentModel;
 using System.Drawing;
+using CoreAnimation;
+using MaterialComponents;
 using UIKit;
 using Xamarin.Forms;
 using MCard = MaterialComponents.Card;
@@ -7,61 +10,152 @@ using MCard = MaterialComponents.Card;
 [assembly: ExportRenderer(typeof(Xamarin.Forms.Frame), typeof(Xamarin.Forms.Platform.iOS.Material.MaterialFrameRenderer), new[] { typeof(Visual.MaterialVisual) })]
 namespace Xamarin.Forms.Platform.iOS.Material
 {
-	public class MaterialFrameRenderer : ViewRenderer<Frame, MCard>
+	public class MaterialFrameRenderer : MCard, IVisualElementRenderer
 	{
-		protected override void OnElementChanged(ElementChangedEventArgs<Frame> e)
-		{
-			base.OnElementChanged(e);
+		private VisualElementPackager _packager;
+		private VisualElementTracker _tracker;
 
-			if (e.NewElement != null)
-				SetupLayer();
+		Xamarin.Forms.Frame FrameElement
+		{
+			get { return Element as Xamarin.Forms.Frame; }
 		}
 
-		protected override void OnElementPropertyChanged(object sender, PropertyChangedEventArgs e)
-		{
-			base.OnElementPropertyChanged(sender, e);
 
+		public VisualElement Element { get; private set; }
+
+		public UIView NativeView
+		{
+			get { return this; }
+		}
+
+		public UIViewController ViewController
+		{
+			get { return null; }
+		}
+
+		public event EventHandler<VisualElementChangedEventArgs> ElementChanged;
+
+
+		protected virtual void OnElementChanged(VisualElementChangedEventArgs e) => ElementChanged?.Invoke(this, e);
+
+		public void SetElement(VisualElement element)
+		{
+			var oldElement = Element;
+			Element = element;
+
+			if (oldElement != null)
+			{
+				oldElement.PropertyChanged -= HandlePropertyChanged;
+			}
+
+			if (element != null)
+			{
+				element.PropertyChanged += HandlePropertyChanged;
+				if (_packager == null)
+				{
+					_packager = new VisualElementPackager(this);
+					_packager.Load();
+
+					_tracker = new VisualElementTracker(this);
+					_tracker.NativeControlUpdated += OnNativeControlUpdated;
+					//_events = new EventTracker(this);
+					//	_events.LoadEvents(this);
+
+					//_insetTracker = new KeyboardInsetTracker(this, () => Window, insets => ContentInset = ScrollIndicatorInsets = insets, point =>
+					//{
+					//	var offset = ContentOffset;
+					//	offset.Y += point.Y;
+					//	SetContentOffset(offset, true);
+					//});
+				}
+
+				SetupLayer();
+			}
+
+			OnElementChanged(new VisualElementChangedEventArgs(oldElement, element));
+		}
+
+		void HandlePropertyChanged(object sender, PropertyChangedEventArgs e)
+		{
 			if (e.PropertyName == VisualElement.BackgroundColorProperty.PropertyName ||
-			    e.PropertyName == Xamarin.Forms.Frame.BorderColorProperty.PropertyName ||
+				e.PropertyName == Xamarin.Forms.Frame.BorderColorProperty.PropertyName ||
 				e.PropertyName == Xamarin.Forms.Frame.HasShadowProperty.PropertyName ||
 				e.PropertyName == Xamarin.Forms.Frame.CornerRadiusProperty.PropertyName)
 				SetupLayer();
 		}
 
+
+		protected override void Dispose(bool disposing)
+		{
+
+			if (disposing)
+			{
+				if (_packager == null)
+					return;
+
+				SetElement(null);
+
+				_packager.Dispose();
+				_packager = null;
+
+				_tracker.NativeControlUpdated -= OnNativeControlUpdated;
+				_tracker.Dispose();
+				_tracker = null;
+			}
+
+			base.Dispose(disposing);
+		}
+		void OnNativeControlUpdated(object sender, EventArgs eventArgs)
+		{
+
+		}
+
 		void SetupLayer()
 		{
-			float cornerRadius = Element.CornerRadius;
+			float cornerRadius = FrameElement.CornerRadius;
 
 			if (cornerRadius == -1f)
 				cornerRadius = 5f; // default corner radius
 
-			Layer.CornerRadius = cornerRadius;
+			CornerRadius = cornerRadius;
 
 			if (Element.BackgroundColor == Color.Default)
-				Layer.BackgroundColor = UIColor.White.CGColor;
+				BackgroundColor = UIColor.White;
 			else
-				Layer.BackgroundColor = Element.BackgroundColor.ToCGColor();
+				BackgroundColor = Element.BackgroundColor.ToUIColor();
 
-			if (Element.HasShadow)
+			if (FrameElement.HasShadow)
 			{
 				Layer.ShadowRadius = 5;
-				Layer.ShadowColor = UIColor.Black.CGColor;
-				Layer.ShadowOpacity = 0.8f;
-				Layer.ShadowOffset = new SizeF();
+				SetShadowColor(UIColor.Black, UIControlState.Normal);
+				
+				//SetShadowElevation(Element.Elevation ?? 0, UIControlState.Normal);				
+				//Layer.ShadowColor = UIColor.Black.CGColor;
 			}
-			else
-				Layer.ShadowOpacity = 0;
-
-			if (Element.BorderColor == Color.Default)
-				Layer.BorderColor = UIColor.Clear.CGColor;
 			else
 			{
-				Layer.BorderColor = Element.BorderColor.ToCGColor();
-				Layer.BorderWidth = 1;
+				//SetShadowColor(UIColor.Black, UIControlState.Normal);
+				SetShadowColor(UIColor.Clear, UIControlState.Normal);
 			}
+			
 
-			Layer.RasterizationScale = UIScreen.MainScreen.Scale;
-			Layer.ShouldRasterize = true;
+			if (FrameElement.BorderColor == Color.Default)
+				SetBorderColor(UIColor.Clear, UIControlState.Normal);
+			else
+			{
+				SetBorderColor(FrameElement.BorderColor.ToUIColor(), UIControlState.Normal);
+				SetBorderWidth(10, UIControlState.Normal);
+			}
+		}
+
+		public SizeRequest GetDesiredSize(double widthConstraint, double heightConstraint)
+		{
+			return NativeView.GetSizeRequest(widthConstraint, heightConstraint, 44, 44);
+		}
+
+		public void SetElementSize(Size size)
+		{
+			Layout.LayoutChildIntoBoundingRegion(Element, new Rectangle(Element.X, Element.Y, size.Width, size.Height));
 		}
 	}
 }

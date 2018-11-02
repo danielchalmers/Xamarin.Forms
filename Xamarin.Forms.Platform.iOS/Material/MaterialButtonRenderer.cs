@@ -42,6 +42,7 @@ namespace Xamarin.Forms.Platform.iOS.Material
 				result.Height = _minimumButtonHeight;
 			}
 
+
 			return result;
 		}
 

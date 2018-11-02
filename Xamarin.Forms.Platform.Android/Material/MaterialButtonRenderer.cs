@@ -44,7 +44,7 @@ namespace Xamarin.Forms.Platform.Android.Material
 			_automationPropertiesProvider = new AutomationPropertiesProvider(this);
 			_effectControlProvider = new EffectControlProvider(this);
 
-			Initialize();
+			Initialize();			
 		}
 
 		public VisualElement Element => Button;
