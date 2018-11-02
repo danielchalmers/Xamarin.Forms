@@ -155,16 +155,16 @@ namespace Xamarin.Forms.Platform.iOS.Material
 			var button = Element;
 
 			if (button.BorderColor != Color.Default)
-				uiButton.Layer.BorderColor = button.BorderColor.ToCGColor();
+				uiButton.SetBorderColor(button.BorderColor.ToUIColor(), UIControlState.Normal);
 
-			uiButton.Layer.BorderWidth = Math.Max(0f, (float)button.BorderWidth);
+			uiButton.SetBorderWidth(Math.Max(0f, (float)button.BorderWidth), UIControlState.Normal);
 
 			nfloat cornerRadius = _defaultCornerRadius;
 
 			if (button.IsSet(Button.CornerRadiusProperty) && button.CornerRadius != (int)Button.CornerRadiusProperty.DefaultValue)
 				cornerRadius = button.CornerRadius;
 
-			uiButton.Layer.CornerRadius = cornerRadius;
+			uiButton.Layer.CornerRadius = cornerRadius; 
 		}
 
 		void UpdateFont()
