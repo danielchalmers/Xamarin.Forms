@@ -13,7 +13,7 @@ using AView = Android.Views.View;
 using MaterialCardView = Android.Support.Design.Card.MaterialCardView;
 
 // this won't go here permanently it's just for testing at this point
-[assembly: ExportRenderer(typeof(Xamarin.Forms.Entry), typeof(MaterialFrameRenderer), new[] { typeof(Visual.MaterialVisual) })]
+[assembly: ExportRenderer(typeof(Xamarin.Forms.Frame), typeof(MaterialFrameRenderer), new[] { typeof(Visual.MaterialVisual) })]
 namespace Xamarin.Forms.Platform.Android.Material
 {
 	public class MaterialFrameRenderer : MaterialCardView, IVisualElementRenderer, IEffectControlProvider, IViewRenderer, ITabStop
@@ -40,13 +40,7 @@ namespace Xamarin.Forms.Platform.Android.Material
 		{
 			_gestureManager = new GestureManager(this);
 			_effectControlProvider = new EffectControlProvider(this);
-		}
-
-		[Obsolete("This constructor is obsolete as of version 2.5. Please use FrameRenderer(Context) instead.")]
-		public MaterialFrameRenderer() : base(Forms.Context)
-		{
-			_gestureManager = new GestureManager(this);
-			_effectControlProvider = new EffectControlProvider(this);			
+			UseCompatPadding = true;
 		}
 
 		protected CardView Control => this;
@@ -181,7 +175,7 @@ namespace Xamarin.Forms.Platform.Android.Material
 				this.EnsureId();
 				_backgroundDrawable = new GradientDrawable();
 				_backgroundDrawable.SetShape(ShapeType.Rectangle);
-				this.SetBackground(_backgroundDrawable);
+				//this.SetBackground(_backgroundDrawable);
 
 				if (_visualElementTracker == null)
 				{
@@ -246,7 +240,17 @@ namespace Xamarin.Forms.Platform.Android.Material
 				return;
 
 			Color bgColor = Element.BackgroundColor;
-			_backgroundDrawable.SetColor(bgColor.IsDefault ? AColor.White : bgColor.ToAndroid());
+
+			int[][] States =
+			{
+				new int[0]
+			};
+			CardBackgroundColor = new global::Android.Content.Res.ColorStateList
+				(
+					States,
+					new int[] { bgColor.IsDefault ? AColor.White : bgColor.ToAndroid() }
+				);
+			
 		}
 
 		void UpdateBorderColor()
@@ -271,9 +275,9 @@ namespace Xamarin.Forms.Platform.Android.Material
 
 			if (elevation == -1f)
 				_defaultElevation = elevation = CardElevation;
-
+			 
 			if (Element.HasShadow)
-				CardElevation = elevation;
+				CardElevation = _defaultElevation;
 			else
 				CardElevation = 0f;
 		}
@@ -296,6 +300,8 @@ namespace Xamarin.Forms.Platform.Android.Material
 				cornerRadius = Context.ToPixels(cornerRadius);
 
 			_backgroundDrawable.SetCornerRadius(cornerRadius);
+
+			this.Radius = cornerRadius;
 		}
 	}
 }

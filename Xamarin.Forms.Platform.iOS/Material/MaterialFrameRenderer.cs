@@ -129,7 +129,7 @@ namespace Xamarin.Forms.Platform.iOS.Material
 				Layer.ShadowRadius = 5;
 				SetShadowColor(UIColor.Black, UIControlState.Normal);
 				
-				//SetShadowElevation(Element.Elevation ?? 0, UIControlState.Normal);				
+				SetShadowElevation(3, UIControlState.Normal);				
 				//Layer.ShadowColor = UIColor.Black.CGColor;
 			}
 			else
@@ -144,7 +144,7 @@ namespace Xamarin.Forms.Platform.iOS.Material
 			else
 			{
 				SetBorderColor(FrameElement.BorderColor.ToUIColor(), UIControlState.Normal);
-				SetBorderWidth(10, UIControlState.Normal);
+				SetBorderWidth(3, UIControlState.Normal);
 			}
 		}
 
